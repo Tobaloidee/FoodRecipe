@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
 
 import elixer.com.foodrecipe.R;
@@ -31,6 +34,14 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(R.drawable.ic_launcher_background);
+
+        Glide.with(viewHolder.itemView.getContext())
+                .setDefaultRequestOptions(requestOptions)
+                .load(mRecipes.get(i))
+                .into( ((RecipeViewHolder)viewHolder).image);
 
         ((RecipeViewHolder)viewHolder).title.setText(mRecipes.get(i).getTitle());
         ((RecipeViewHolder)viewHolder).publisher.setText(mRecipes.get(i).getPublisher());
