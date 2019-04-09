@@ -18,15 +18,29 @@ public class Recipe implements Parcelable {
     public Recipe() {
     }
 
-    public Recipe(String title, String publisher, String publisher_url, String[] ingredients, String recipe_id, String image_url, float social_rank) {
-        this.title = title;
-        this.publisher = publisher;
-        this.publisher_url = publisher_url;
-        this.ingredients = ingredients;
-        this.recipe_id = recipe_id;
-        this.image_url = image_url;
-        this.social_rank = social_rank;
+
+
+    protected Recipe(Parcel in) {
+        title = in.readString();
+        publisher = in.readString();
+        publisher_url = in.readString();
+        ingredients = in.createStringArray();
+        recipe_id = in.readString();
+        image_url = in.readString();
+        social_rank = in.readFloat();
     }
+
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
+        }
+
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -104,6 +118,12 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeString(title);
+        dest.writeString(publisher);
+        dest.writeString(publisher_url);
+        dest.writeStringArray(ingredients);
+        dest.writeString(recipe_id);
+        dest.writeString(image_url);
+        dest.writeFloat(social_rank);
     }
 }

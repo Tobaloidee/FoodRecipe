@@ -7,14 +7,21 @@ import android.arch.lifecycle.ViewModel;
 import java.util.List;
 
 import elixer.com.foodrecipe.models.Recipe;
+import elixer.com.foodrecipe.repositories.RecipeRepository;
 
 public class RecipeListViewModel extends ViewModel {
-    private MutableLiveData<List<Recipe>> mRecipes = new MutableLiveData<>();
+    private RecipeRepository mRecipeRepository;
 
     public RecipeListViewModel() {
+        mRecipeRepository = (RecipeRepository) RecipeRepository.getInstance();
     }
 
     public LiveData<List<Recipe>> getRecipe(){
-        return mRecipes;
+        return mRecipeRepository.getRecipes();
+    }
+
+    public void searchRecipesApi(String query, int pageNumber){
+
+        mRecipeRepository.searchRecipesApi(query, pageNumber);
     }
 }
