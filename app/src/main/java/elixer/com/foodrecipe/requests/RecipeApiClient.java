@@ -66,6 +66,7 @@ public class RecipeApiClient {
         mRetrieveRecipesRunnable = new RetrieveRecipesRunnable(query, pageNumber);
         final Future handler = AppExecutors.getInstance().networkIO().submit(mRetrieveRecipesRunnable);
 
+        mRecipeRequestTimeout.setValue(false);
         // Set a timeout for the data refresh
         AppExecutors.getInstance().networkIO().schedule(new Runnable() {
             @Override

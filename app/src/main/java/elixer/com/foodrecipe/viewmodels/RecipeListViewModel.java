@@ -10,33 +10,39 @@ import elixer.com.foodrecipe.models.Recipe;
 import elixer.com.foodrecipe.repositories.RecipeRepository;
 
 public class RecipeListViewModel extends ViewModel {
+
     private RecipeRepository mRecipeRepository;
     private boolean mIsViewingRecipes;
     private boolean mIsPerformingQuery;
 
-
     public RecipeListViewModel() {
-
         mRecipeRepository = RecipeRepository.getInstance();
         mIsPerformingQuery = false;
     }
 
-    public LiveData<List<Recipe>> getRecipes() {
+    public LiveData<List<Recipe>> getRecipes(){
         return mRecipeRepository.getRecipes();
     }
 
+    public LiveData<Boolean> isQueryExhausted(){
+        return mRecipeRepository.isQueryExhausted();
+    }
+
     public void searchRecipesApi(String query, int pageNumber){
-        mIsPerformingQuery = true;
         mIsViewingRecipes = true;
+        mIsPerformingQuery = true;
         mRecipeRepository.searchRecipesApi(query, pageNumber);
     }
+
     public void searchNextPage(){
-        if(!mIsPerformingQuery && mIsViewingRecipes){
+        if(!mIsPerformingQuery
+                && mIsViewingRecipes
+                && !isQueryExhausted().getValue()){
             mRecipeRepository.searchNextPage();
         }
     }
 
-    public boolean isViewingRecipes() {
+    public boolean isViewingRecipes(){
         return mIsViewingRecipes;
     }
 
@@ -44,27 +50,27 @@ public class RecipeListViewModel extends ViewModel {
         mIsViewingRecipes = isViewingRecipes;
     }
 
-    public boolean ismIsPerformingQuery() {
+    public void setmIsPerformingQuery(Boolean isPerformingQuery){
+        mIsPerformingQuery = isPerformingQuery;
+    }
+
+    public boolean isPerformingQuery(){
         return mIsPerformingQuery;
     }
 
-    public void setmIsPerformingQuery(boolean mIsPerformingQuery) {
-        this.mIsPerformingQuery = mIsPerformingQuery;
-    }
-
     public boolean onBackPressed(){
-
         if(mIsPerformingQuery){
-            //cancel
+            // cancel the query
             mRecipeRepository.cancelRequest();
             mIsPerformingQuery = false;
         }
-        if(mIsViewingRecipes ){
+        if(mIsViewingRecipes){
             mIsViewingRecipes = false;
             return false;
         }
         return true;
     }
 }
+
 
 
